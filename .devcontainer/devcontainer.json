@@ -1,0 +1,6 @@
+{
+  "name": "SimpleTravelDiary Dev",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "ap",
+  "workspaceFolder": "/workspace"
+}

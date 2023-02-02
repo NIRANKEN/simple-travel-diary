@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  ap:
+    build: .devcontainer/Dockerfile
+    env_file:
+      - .devcontainer/ap.env
+    command: sleep infinity
