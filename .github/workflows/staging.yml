@@ -39,17 +39,18 @@ jobs:
         run: yarn --cwd ./app && yarn --cwd ./app build
 
       # - name: Deploy
-      #   run: npm run cdk deploy -c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
+      #   run: cdk deploy -c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'diff'
+          cdk_args: '-c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}'
           actions_comment: true
 
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_args: '--require-approval never'
+          cdk_args: '--require-approval never -c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}'
           actions_comment: false
