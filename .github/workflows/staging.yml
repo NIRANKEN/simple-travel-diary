@@ -38,9 +38,6 @@ jobs:
       - name: Build Web
         run: yarn --cwd ./app && yarn --cwd ./app build
 
-      # - name: Deploy
-      #   run: cdk deploy -c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
-
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
