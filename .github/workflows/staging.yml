@@ -14,7 +14,7 @@ env:
   STAGING_DOMAIN: niranken.tk
   STAGING_SUBDOMAIN: simple-travel-diary
   STAGING_AWS_ACCOUNT_ID: $${{ secrets.AWS_ACCOUNT_ID }}
-  STAGING_GMAP_API_KEY: $${{ secrets.STAGING_GMAP_API_KEY }}
+  REACT_APP_GMAP_KEY: $${{ secrets.REACT_APP_GMAP_KEY }}
 
 jobs:
   build:
@@ -39,7 +39,7 @@ jobs:
       - name: Build Web
         run: |
           yarn --cwd ./app
-          echo REACT_APP_GMAP_KEY=${{ env.STAGING_GMAP_API_KEY }} > ./app/.env.staging
+          echo REACT_APP_GMAP_KEY=${{ env.REACT_APP_GMAP_KEY }} > ./app/.env.staging
           yarn --cwd ./app build:staging
 
       - name: cdk diff
