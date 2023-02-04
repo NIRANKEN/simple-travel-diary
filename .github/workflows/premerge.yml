@@ -1,0 +1,23 @@
+name: premerge
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Dependency
+        run: yarn --cwd ./app
+
+      - name: Run UnitTest
+        run: yarn --cwd ./app test
+
+      - name: Run E2ETest
+        run: yarn --cwd ./app test:e2e

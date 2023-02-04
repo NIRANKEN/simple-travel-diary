@@ -37,7 +37,10 @@ jobs:
         run: npm install
 
       - name: Build Web
-        run: yarn --cwd ./app && echo REACT_APP_GMAP_KEY=${{ env.STAGING_GMAP_API_KEY }} > ./app/.env && yarn --cwd ./app build
+        run: |
+          yarn --cwd ./app
+          echo REACT_APP_GMAP_KEY=${{ env.STAGING_GMAP_API_KEY }} > ./app/.env.staging
+          yarn --cwd ./app build:staging
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
