@@ -13,8 +13,8 @@ env:
   AWS_REGION: us-east-1
   STAGING_DOMAIN: niranken.tk
   STAGING_SUBDOMAIN: simple-travel-diary
-  STAGING_AWS_ACCOUNT_ID: $${{ secrets.AWS_ACCOUNT_ID }}
-  REACT_APP_GMAP_KEY: $${{ secrets.REACT_APP_GMAP_KEY }}
+  STAGING_AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  REACT_APP_GMAP_KEY: ${{ secrets.REACT_APP_GMAP_KEY }}
 
 jobs:
   build:
