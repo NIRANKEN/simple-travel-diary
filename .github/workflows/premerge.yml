@@ -17,7 +17,20 @@ jobs:
         run: yarn --cwd ./app
 
       - name: Run UnitTest
-        run: yarn --cwd ./app test
+        run: yarn --cwd ./app test --collect-coverage
+      
+      - name: Upload UnitTest Coverage Report
+        uses: danhunsaker/clover-reporter-action@v0.2.17-clover
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          clover-file: ./app/coverage/clover.xml
 
       - name: Run E2ETest
         run: yarn --cwd ./app test:e2e
+
+      - name: Upload E2ETest Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-result
+          path: |
+            ./app/cypress/videos
