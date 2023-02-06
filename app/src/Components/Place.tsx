@@ -15,6 +15,7 @@ type PlaceProps = {
 
 export const Place: React.FC<PlaceProps> = ({ handleSearchPlace }) => {
   // もし選んでいたら選択状態にする
+  // 順番を変更できるようにする
   return (
     <Grid container direction="column" spacing={4}>
       <Grid item>
