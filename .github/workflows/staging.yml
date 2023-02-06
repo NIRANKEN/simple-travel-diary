@@ -42,6 +42,14 @@ jobs:
           echo REACT_APP_GMAP_KEY=${{ env.REACT_APP_GMAP_KEY }} > ./app/.env.staging
           yarn --cwd ./app build:staging
 
+      - name: Get Build Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-result
+          path: |
+            ./app/.env.staging
+            ./app/build
+
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
