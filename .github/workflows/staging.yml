@@ -39,7 +39,7 @@ jobs:
       - name: Build Web
         run: |
           yarn --cwd ./app
-          echo REACT_APP_GMAP_KEY=${REACT_APP_GMAP_KEY} > ./app/.env.staging
+          echo REACT_APP_GMAP_KEY=$REACT_APP_GMAP_KEY > ./app/.env.staging
           yarn --cwd ./app build:staging
 
       - name: Get Build Web Result
