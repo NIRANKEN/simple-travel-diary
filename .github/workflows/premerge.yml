@@ -17,13 +17,11 @@ jobs:
         run: yarn --cwd ./app
 
       - name: Run UnitTest
-        run: yarn --cwd ./app test --collect-coverage
-      
-      - name: Upload UnitTest Coverage Report
-        uses: danhunsaker/clover-reporter-action@v0.2.17-clover
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          clover-file: ./app/coverage/clover.xml
+          test-script: yarn test
+          working-directory: ./app
+          skip-step: install
 
       - name: Run E2ETest
         run: yarn --cwd ./app test:e2e
