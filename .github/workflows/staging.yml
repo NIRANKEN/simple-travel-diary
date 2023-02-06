@@ -40,7 +40,6 @@ jobs:
         run: |
           yarn --cwd ./app
           echo REACT_APP_GMAP_KEY=${REACT_APP_GMAP_KEY} > ./app/.env.staging
-          cat ./app/.env.staging
           yarn --cwd ./app build:staging
 
       - name: Get Build Web Result
@@ -50,6 +49,7 @@ jobs:
           path: |
             ./app/.env.staging
             ./app/build
+          retention-days: 14
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
