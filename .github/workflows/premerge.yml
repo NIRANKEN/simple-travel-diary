@@ -21,6 +21,7 @@ jobs:
         with:
           test-script: yarn test
           working-directory: ./app
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-step: install
 
       - name: Run E2ETest
