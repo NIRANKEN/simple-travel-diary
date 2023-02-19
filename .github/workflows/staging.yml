@@ -1,8 +1,8 @@
 name: Build & Deploy React App on S3
 on:
   push:
-      branches:
-        - main
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -15,6 +15,11 @@ env:
   STAGING_SUBDOMAIN: simple-travel-diary
   STAGING_AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   REACT_APP_GMAP_KEY: ${{ secrets.REACT_APP_GMAP_KEY }}
+  STAGING_GOOGLE_AUTH_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_AUTH_CLIENT_ID }}
+  STAGING_GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
+  STAGING_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
+  STAGING_USER_POOL_CLIENT_ID: ${{ secrets.STAGING_USER_POOL_CLIENT_ID }}
+
 
 jobs:
   build:
@@ -40,6 +45,9 @@ jobs:
         run: |
           yarn --cwd ./app
           echo REACT_APP_GMAP_KEY=$REACT_APP_GMAP_KEY > ./app/.env.staging
+          echo REACT_APP_USER_POOL_ID=$STAGING_USER_POOL_ID > ./app/.env.staging
+          echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID > ./app/.env.staging
+          echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com > ./app/.env.staging
           yarn --cwd ./app build:staging
 
       - name: Get Build Web Result
@@ -54,13 +62,22 @@ jobs:
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: 'diff'
-          cdk_args: '-c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}'
+          cdk_subcommand: "diff"
+          cdk_args: "-c domain=${{ env.STAGING_DOMAIN }}
+            -c subdomain=${{ env.STAGING_SUBDOMAIN }}
+            -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
+            -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
+            -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}"
           actions_comment: true
 
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: 'deploy'
-          cdk_args: '--require-approval never -c domain=${{ env.STAGING_DOMAIN }} -c subdomain=${{ env.STAGING_SUBDOMAIN }} -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}'
+          cdk_subcommand: "deploy"
+          cdk_args: "--require-approval never
+            -c domain=${{ env.STAGING_DOMAIN }}
+            -c subdomain=${{ env.STAGING_SUBDOMAIN }}
+            -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
+            -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
+            -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}"
           actions_comment: false

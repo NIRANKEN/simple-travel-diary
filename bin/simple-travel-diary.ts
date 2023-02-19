@@ -9,6 +9,8 @@ class MyStaticSiteStack extends Stack {
     new SimpleTravelDiaryStack(this, "SimpleTravelDiaryStack", {
       domainName: this.node.tryGetContext("domain"),
       appSubDomain: this.node.tryGetContext("subdomain"),
+      googleClientId: this.node.tryGetContext("googleClientId"),
+      googleClientSecret: this.node.tryGetContext("googleClientSecret"),
     });
   }
 }
