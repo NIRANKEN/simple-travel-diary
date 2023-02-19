@@ -8,6 +8,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as cloudfront_origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as cognito from "aws-cdk-lib/aws-cognito";
+import * as secrets_manager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 
 export interface StaticSiteProps {
@@ -15,6 +16,7 @@ export interface StaticSiteProps {
   appSubDomain: string;
   googleClientId: string;
   googleClientSecret: string;
+  googleCognitoSecretArn: string;
 }
 
 export class SimpleTravelDiaryStack extends Construct {
@@ -59,12 +61,15 @@ export class SimpleTravelDiaryStack extends Construct {
         logoutUrls: [`https://${appDomain}/login`],
       },
     });
+    const secrets = secrets_manager.Secret.fromSecretAttributes(this, "staging/SimpleTravelDiary/CognitoClientSecret", {
+      secretArn: "",
+    });
     const provider = new cognito.UserPoolIdentityProviderGoogle(
       this,
       "simple-travel-diary-userpool-idp-google",
       {
         clientId: props.googleClientId,
-        clientSecret: props.googleClientSecret,
+        clientSecret: props.googleClientSecret, // deprecated. use clientSecretValue from secretsmanager
         userPool: userPool,
         scopes: ["email", "profile", "openid"],
         attributeMapping: {

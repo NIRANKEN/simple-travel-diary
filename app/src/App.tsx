@@ -1,4 +1,4 @@
-import { GoogleOAuthProvider } from "@react-oauth/google";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Amplify } from "aws-amplify";
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -32,11 +32,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
+  // const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <RouterProvider router={router} />
-    </GoogleOAuthProvider>
+    // <GoogleOAuthProvider clientId={clientId}>
+    <RouterProvider router={router} />
+    // </GoogleOAuthProvider>
   );
 }
 

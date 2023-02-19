@@ -11,6 +11,7 @@ class MyStaticSiteStack extends Stack {
       appSubDomain: this.node.tryGetContext("subdomain"),
       googleClientId: this.node.tryGetContext("googleClientId"),
       googleClientSecret: this.node.tryGetContext("googleClientSecret"),
+      googleCognitoSecretArn: this.node.tryGetContext("googleCognitoSecretArn"),
     });
   }
 }
