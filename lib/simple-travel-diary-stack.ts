@@ -62,7 +62,7 @@ export class SimpleTravelDiaryStack extends Construct {
       },
     });
     const secrets = secrets_manager.Secret.fromSecretAttributes(this, "staging/SimpleTravelDiary/CognitoClientSecret", {
-      secretArn: "",
+      secretCompleteArn: props.googleCognitoSecretArn,
     });
     const provider = new cognito.UserPoolIdentityProviderGoogle(
       this,
