@@ -69,7 +69,7 @@ export class SimpleTravelDiaryStack extends Construct {
       "simple-travel-diary-userpool-idp-google",
       {
         clientId: props.googleClientId,
-        clientSecret: props.googleClientSecret, // deprecated. use clientSecretValue from secretsmanager
+        clientSecretValue: secrets.secretValue,
         userPool: userPool,
         scopes: ["email", "profile", "openid"],
         attributeMapping: {
