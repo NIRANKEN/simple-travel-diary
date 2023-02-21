@@ -21,7 +21,6 @@ env:
   STAGING_USER_POOL_CLIENT_ID: ${{ secrets.STAGING_USER_POOL_CLIENT_ID }}
   STAGING_GOOGLE_COGNITO_SECRET_ARN: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_ARN }}
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,15 +49,6 @@ jobs:
           echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID > ./app/.env.staging
           echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com > ./app/.env.staging
           yarn --cwd ./app build:staging
-
-      - name: Get Build Web Result
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-result
-          path: |
-            ./app/.env.staging
-            ./app/build
-          retention-days: 14
 
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
