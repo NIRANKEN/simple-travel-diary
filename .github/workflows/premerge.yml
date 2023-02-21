@@ -5,20 +5,6 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: write
-
-env:
-  AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
-  AWS_REGION: us-east-1
-  STAGING_DOMAIN: niranken.tk
-  STAGING_SUBDOMAIN: simple-travel-diary
-  STAGING_AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  STAGING_GOOGLE_AUTH_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_AUTH_CLIENT_ID }}
-  STAGING_GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-  STAGING_GOOGLE_COGNITO_SECRET_ARN: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_ARN }}
-
 jobs:
   precheck:
     runs-on: ubuntu-latest
@@ -47,21 +33,3 @@ jobs:
           name: e2e-result
           path: |
             ./app/cypress/videos
-
-      - name: Assume Role
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: cdk diff for staging resources
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: "diff"
-          cdk_args: "-c domain=${{ env.STAGING_DOMAIN }}
-            -c subdomain=${{ env.STAGING_SUBDOMAIN }}
-            -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
-            -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
-            -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretArn=${{ env.STAGING_GOOGLE_COGNITO_SECRET_ARN }}"
-          actions_comment: true
