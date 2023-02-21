@@ -36,6 +36,7 @@ export const ButtonAppBar: React.FC<ButtonAppBarProps> = ({
                   onClick={handleSignOut}
                   variant="outlined"
                   color="inherit"
+                  sx={{ marginLeft: 2 }}
                 >
                   ログアウト
                 </Button>
