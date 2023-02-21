@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Map, Place, Note } from "../Components";
 import { useState } from "react";
-import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -34,7 +33,6 @@ export const Diary: React.FC<DiaryProps> = () => {
       p={4}
     >
       <Grid item>
-        <Typography variant="h3">あああ</Typography>
         <FormControl fullWidth>
           <InputLabel id="travel-select-label">旅の名前</InputLabel>
           <Select
@@ -54,7 +52,7 @@ export const Diary: React.FC<DiaryProps> = () => {
       <Grid item>
         <Box
           sx={{
-            height: 1024,
+            height: 768,
           }}
         >
           <Grid container spacing={4} sx={{ height: "100%" }}>
