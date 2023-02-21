@@ -6,13 +6,11 @@ import { useEffect } from "react";
 import React from "react";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
-// import { GoogleLoginButton } from "../Components";
-// import useScript from "../Hooks/useScript";
-// import { GoogleLogin } from "@react-oauth/google";
+import { CircularProgress } from "../Components/CircularProgress";
+import { User } from "../Types/User";
 
 export const Login: React.FC<{}> = () => {
-  // useScript("https://accounts.google.com/gsi/client");
-  const [user, setUser] = React.useState<any>(null);
+  const [user, setUser] = React.useState<User>();
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const signIn = async () =>
@@ -25,9 +23,14 @@ export const Login: React.FC<{}> = () => {
     const getCurrentUser = async () => {
       const currentUser = await Auth.currentUserInfo();
       if (currentUser) {
-        setUser(currentUser);
+        setUser({
+          givenName: currentUser.attributes.given_name,
+          pictureUrl: currentUser.attributes.picture,
+          email: currentUser.attributes.email,
+          emailVerified: currentUser.attributes.email_verified,
+        });
       }
-      setLoading(true);
+      setLoading(false);
     };
     getCurrentUser();
   }, []);
@@ -45,35 +48,32 @@ export const Login: React.FC<{}> = () => {
       </Grid>
       <Grid item>
         {loading ? (
-          <Typography>よみこみちゅう</Typography>
+          <>
+            <Typography>よみこみちゅう</Typography>
+            <CircularProgress suffix="login" />
+          </>
         ) : user ? (
           <>
-            <Button onClick={signIn}>サインイン</Button>
             <Avatar
-              src={user.attributes.picture}
-              sx={{ width: 100, height: 100 }}
-              alt={user.attributes.given_name}
+              src={user.pictureUrl}
+              sx={{
+                width: 100,
+                height: 100,
+                flexGrow: 1,
+              }}
+              alt={user.givenName}
             />
-            <Typography>Name: ${user.attributes.given_name}</Typography>
-            <Typography>Email: ${user.attributes.email}</Typography>
-            <Button onClick={signOut}>サインアウト</Button>
+            <Button onClick={signOut} variant="outlined" color="inherit">
+              サインアウト
+            </Button>
           </>
         ) : (
           <>
-            <Button onClick={signIn}>サインイン</Button>
+            <Button onClick={signIn} variant="contained" color="primary">
+              サインイン
+            </Button>
           </>
         )}
-        <Typography>なかみ</Typography>
-        {/* <GoogleLoginButton /> */}
-        {/* <GoogleLogin
-          onSuccess={(res) => {
-            console.log(res);
-          }}
-          onError={() => {
-            console.error("Login Failed");
-          }}
-          useOneTap
-        /> */}
       </Grid>
     </Grid>
   );

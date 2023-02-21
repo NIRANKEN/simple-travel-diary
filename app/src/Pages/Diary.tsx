@@ -7,8 +7,13 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { User } from "../Types/User";
 
-export const Diary: React.FC<{}> = () => {
+type DiaryProps = {
+  user: User | undefined;
+};
+
+export const Diary: React.FC<DiaryProps> = () => {
   const [travelName, setTravelName] = useState("2023/01沖縄旅行");
   const [placeName, setPlaceName] = useState("美ら海水族館"); // TODO: デフォルト値
 
@@ -29,7 +34,7 @@ export const Diary: React.FC<{}> = () => {
       p={4}
     >
       <Grid item>
-        <Typography variant="h3"></Typography>
+        <Typography variant="h3">あああ</Typography>
         <FormControl fullWidth>
           <InputLabel id="travel-select-label">旅の名前</InputLabel>
           <Select

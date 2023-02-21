@@ -57,8 +57,8 @@ export class SimpleTravelDiaryStack extends Construct {
         cognito.UserPoolClientIdentityProvider.GOOGLE,
       ],
       oAuth: {
-        callbackUrls: [`https://${appDomain}/login`],
-        logoutUrls: [`https://${appDomain}/login`],
+        callbackUrls: [`https://${appDomain}`, "http://localhost:9000"], // TODO: 開発用にstagingとは異なるuserPoolつくる
+        logoutUrls: [`https://${appDomain}`, "http://localhost:9000"],
       },
     });
     const secrets = secrets_manager.Secret.fromSecretAttributes(this, "staging/SimpleTravelDiary/CognitoClientSecret", {
