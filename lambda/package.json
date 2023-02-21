@@ -1,0 +1,22 @@
+{
+  "name": "lambda",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "./cdk-wrapper.sh"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.110",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@middy/core": "^4.2.4",
+    "@middy/http-json-body-parser": "^4.2.4",
+    "aws-lambda": "^1.0.7",
+    "json-schema-to-ts": "^2.6.2"
+  }
+}

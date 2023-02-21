@@ -16,7 +16,7 @@ export interface StaticSiteProps {
   appSubDomain: string;
   googleClientId: string;
   googleClientSecret: string;
-  googleCognitoSecretArn: string;
+  googleCognitoSecretName: string;
 }
 
 export class SimpleTravelDiaryStack extends Construct {
@@ -38,32 +38,42 @@ export class SimpleTravelDiaryStack extends Construct {
     new CfnOutput(this, "WebAppPage", { value: "https://" + appDomain });
 
     // create GoogleUserAuth
-    const userPool = new cognito.UserPool(this, "simple-travel-diary-userpool", {
-      userPoolName: "simple-travel-diary-user-pool",
-      selfSignUpEnabled: false, // TODO: should be true when sign-up is ready
-      signInAliases: {
-        email: true,
-      },
-      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
-    });
-    const userPoolClient = new cognito.UserPoolClient(this, "simple-travel-diary-userpool-client", {
-      userPool,
-      authFlows: {
-        adminUserPassword: true,
-        custom: true,
-        userSrp: true,
-      },
-      supportedIdentityProviders: [
-        cognito.UserPoolClientIdentityProvider.GOOGLE,
-      ],
-      oAuth: {
-        callbackUrls: [`https://${appDomain}/`, "http://localhost:9000/"], // TODO: 開発用にstagingとは異なるuserPoolつくる
-        logoutUrls: [`https://${appDomain}/`, "http://localhost:9000/"],
-      },
-    });
-    const secrets = secrets_manager.Secret.fromSecretAttributes(this, "staging/SimpleTravelDiary/CognitoClientSecret", {
-      secretCompleteArn: props.googleCognitoSecretArn,
-    });
+    const userPool = new cognito.UserPool(
+      this,
+      "simple-travel-diary-userpool",
+      {
+        userPoolName: "simple-travel-diary-user-pool",
+        selfSignUpEnabled: false, // TODO: should be true when sign-up is ready
+        signInAliases: {
+          email: true,
+        },
+        accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      }
+    );
+    const userPoolClient = new cognito.UserPoolClient(
+      this,
+      "simple-travel-diary-userpool-client",
+      {
+        userPool,
+        authFlows: {
+          adminUserPassword: true,
+          custom: true,
+          userSrp: true,
+        },
+        supportedIdentityProviders: [
+          cognito.UserPoolClientIdentityProvider.GOOGLE,
+        ],
+        oAuth: {
+          callbackUrls: [`https://${appDomain}/`, "http://localhost:9000/"], // TODO: 開発用にstagingとは異なるuserPoolつくる
+          logoutUrls: [`https://${appDomain}/`, "http://localhost:9000/"],
+        },
+      }
+    );
+    const secrets = secrets_manager.Secret.fromSecretNameV2(
+      this,
+      "GoogleCognitoSecret",
+      props.googleCognitoSecretName
+    );
     const provider = new cognito.UserPoolIdentityProviderGoogle(
       this,
       "simple-travel-diary-userpool-idp-google",
@@ -81,14 +91,21 @@ export class SimpleTravelDiaryStack extends Construct {
       }
     );
     userPoolClient.node.addDependency(provider);
-    const cognitoDomain = userPool.addDomain("simple-travel-diary-auth-domain", {
-      cognitoDomain: {
-        domainPrefix: props.appSubDomain
+    const cognitoDomain = userPool.addDomain(
+      "simple-travel-diary-auth-domain",
+      {
+        cognitoDomain: {
+          domainPrefix: props.appSubDomain,
+        },
       }
-    });
+    );
     new CfnOutput(this, "UserPoolId", { value: userPool.userPoolId });
-    new CfnOutput(this, "UserPoolClientId", { value: userPoolClient.userPoolClientId });
-    new CfnOutput(this, "CognitoAuthDomainName", { value: cognitoDomain.domainName });
+    new CfnOutput(this, "UserPoolClientId", {
+      value: userPoolClient.userPoolClientId,
+    });
+    new CfnOutput(this, "CognitoAuthDomainName", {
+      value: cognitoDomain.domainName,
+    });
 
     // Content bucket for app
     const appBucket = new s3.Bucket(this, "SimpleTravelDiaryAppBucket", {

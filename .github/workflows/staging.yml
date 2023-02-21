@@ -19,7 +19,7 @@ env:
   STAGING_GOOGLE_AUTH_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
   STAGING_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
   STAGING_USER_POOL_CLIENT_ID: ${{ secrets.STAGING_USER_POOL_CLIENT_ID }}
-  STAGING_GOOGLE_COGNITO_SECRET_ARN: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_ARN }}
+  STAGING_GOOGLE_COGNITO_SECRET_NAME: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
 
 jobs:
   build:
@@ -48,6 +48,7 @@ jobs:
           echo REACT_APP_USER_POOL_ID=$STAGING_USER_POOL_ID > ./app/.env.staging
           echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID > ./app/.env.staging
           echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com > ./app/.env.staging
+          echo REACT_APP_WEB_ENDPOINT=https://${STAGING_SUBDOMAIN}.${STAGING_DOMAIN}
           yarn --cwd ./app build:staging
 
       - name: cdk diff
@@ -59,7 +60,7 @@ jobs:
             -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
             -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
             -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretArn=${{ env.STAGING_GOOGLE_COGNITO_SECRET_ARN }}"
+            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}"
           actions_comment: true
 
       - name: cdk deploy
@@ -72,5 +73,5 @@ jobs:
             -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
             -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
             -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretArn=${{ env.STAGING_GOOGLE_COGNITO_SECRET_ARN }}"
+            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}"
           actions_comment: false

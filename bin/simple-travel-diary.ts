@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { App, Stack, StackProps } from "aws-cdk-lib";
+import { SimpleTravelDiaryApiStack } from "../lib/simple-travel-diary-api-stack";
 import { SimpleTravelDiaryStack } from "../lib/simple-travel-diary-stack";
 
 class MyStaticSiteStack extends Stack {
@@ -11,7 +12,10 @@ class MyStaticSiteStack extends Stack {
       appSubDomain: this.node.tryGetContext("subdomain"),
       googleClientId: this.node.tryGetContext("googleClientId"),
       googleClientSecret: this.node.tryGetContext("googleClientSecret"),
-      googleCognitoSecretArn: this.node.tryGetContext("googleCognitoSecretArn"),
+      googleCognitoSecretName: this.node.tryGetContext("googleCognitoSecretName"),
+    });
+
+    new SimpleTravelDiaryApiStack(this, "SimpleTravelDiaryApiStack", {
     });
   }
 }
