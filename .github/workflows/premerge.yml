@@ -6,6 +6,8 @@ on:
   workflow_dispatch:
 
 env:
+  AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+  AWS_REGION: us-east-1
   STAGING_DOMAIN: niranken.tk
   STAGING_SUBDOMAIN: simple-travel-diary
   STAGING_AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -41,6 +43,12 @@ jobs:
           name: e2e-result
           path: |
             ./app/cypress/videos
+
+      - name: Assume Role
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: cdk diff for staging resources
         uses: youyo/aws-cdk-github-actions@v2
