@@ -84,8 +84,10 @@ export const Diary: React.FC<DiaryProps> = () => {
       .then((result) => {
         console.log(result);
         const fetchedTravels = result as Travel[];
+        console.log(fetchedTravels);
         setTravels(fetchedTravels);
         if (fetchedTravels.length === 0) {
+          console.log("新しい旅行を作ります");
           setSelectedTravel({
             id: uuid(),
             name: "新しい旅行",
@@ -93,6 +95,7 @@ export const Diary: React.FC<DiaryProps> = () => {
             diaries: [],
           });
         } else {
+          console.log(fetchedTravels[0]);
           setSelectedTravel(fetchedTravels[0]);
         }
       })
@@ -133,7 +136,9 @@ export const Diary: React.FC<DiaryProps> = () => {
                 onChange={handleChangeTravel}
               >
                 {travels.map((travel) => (
-                  <MenuItem value={travel.ord}>{travel.name}</MenuItem>
+                  <MenuItem key={travel.id} value={travel.id}>
+                    {travel.name}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
