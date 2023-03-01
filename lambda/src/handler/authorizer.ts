@@ -4,7 +4,9 @@ import {
 } from "aws-lambda";
 import { middyfy } from "../lib/lambda";
 
-const principalId: string = "niranken-simple-travel-diary";
+const principalId: string = process.env.PRINCIPAL_ID
+  ? process.env.PRINCIPAL_ID
+  : "niranken-simple-travel-diary";
 
 const authorizerHandler: APIGatewayTokenAuthorizerHandler = async ({
   authorizationToken,

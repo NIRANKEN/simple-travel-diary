@@ -12,10 +12,13 @@ class MyStaticSiteStack extends Stack {
       appSubDomain: this.node.tryGetContext("subdomain"),
       googleClientId: this.node.tryGetContext("googleClientId"),
       googleClientSecret: this.node.tryGetContext("googleClientSecret"),
-      googleCognitoSecretName: this.node.tryGetContext("googleCognitoSecretName"),
+      googleCognitoSecretName: this.node.tryGetContext(
+        "googleCognitoSecretName"
+      ),
     });
 
     new SimpleTravelDiaryApiStack(this, "SimpleTravelDiaryApiStack", {
+      principalId: this.node.tryGetContext("principalId"),
     });
   }
 }

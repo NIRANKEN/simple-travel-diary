@@ -25,6 +25,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: GenerateRandomVariable
+        run: echo REACT_APP_DUMMY_TOKEN=$(echo ${RANDOM} | md5sum | head -c 20)$(date +%s) >> $GITHUB_ENV
+
       - name: PreBuild
         run: |
           curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -; sudo apt-get update
@@ -45,10 +48,11 @@ jobs:
         run: |
           yarn --cwd ./app
           echo REACT_APP_GMAP_KEY=$REACT_APP_GMAP_KEY > ./app/.env.staging
-          echo REACT_APP_USER_POOL_ID=$STAGING_USER_POOL_ID > ./app/.env.staging
-          echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID > ./app/.env.staging
-          echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com > ./app/.env.staging
-          echo REACT_APP_WEB_ENDPOINT=https://${STAGING_SUBDOMAIN}.${STAGING_DOMAIN}
+          echo REACT_APP_USER_POOL_ID=$STAGING_USER_POOL_ID >> ./app/.env.staging
+          echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID >> ./app/.env.staging
+          echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com >> ./app/.env.staging
+          echo REACT_APP_WEB_ENDPOINT=https://${STAGING_SUBDOMAIN}.${STAGING_DOMAIN} >> ./app/.env.staging
+          echo REACT_APP_DUMMY_TOKEN=${REACT_APP_DUMMY_TOKEN} >> ./app/.env.staging
           yarn --cwd ./app build:staging
 
       - name: cdk diff
@@ -60,7 +64,8 @@ jobs:
             -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
             -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
             -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}"
+            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+            -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}"
           actions_comment: true
 
       - name: cdk deploy
@@ -73,5 +78,6 @@ jobs:
             -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
             -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
             -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}"
+            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+            -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}"
           actions_comment: false

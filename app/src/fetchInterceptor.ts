@@ -11,7 +11,7 @@ export const fetchInterceptor = (): FetchInterceptor => ({
     try {
       config.headers = {
         ...config.headers,
-        Authorization: 'Bearer Allow niranken-simple-travel-diary',
+        Authorization: `Bearer Allow ${process.env.REACT_APP_DUMMY_TOKEN}`,
       };
       return [url, config];
     } catch (e) {

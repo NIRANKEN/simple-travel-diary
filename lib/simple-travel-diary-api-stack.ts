@@ -5,10 +5,12 @@ import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import path = require("path");
 import { Construct } from "constructs";
 
-export interface ApiProps {}
+export interface ApiProps {
+  principalId: string;
+}
 
 export class SimpleTravelDiaryApiStack extends Construct {
-  constructor(scope: Stack, id: string, props?: ApiProps) {
+  constructor(scope: Stack, id: string, props: ApiProps) {
     super(scope, id);
 
     // create lambda Functions
@@ -21,6 +23,7 @@ export class SimpleTravelDiaryApiStack extends Construct {
       timeout: Duration.seconds(30),
       environment: {
         IS_LOCAL: "false",
+        PRINCIPAL_ID: props.principalId
       },
     });
 
