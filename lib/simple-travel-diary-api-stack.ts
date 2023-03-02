@@ -42,7 +42,7 @@ export class SimpleTravelDiaryApiStack extends Construct {
 
     const auth = new apigateway.TokenAuthorizer(this, "NewTokenAuthorizer", {
       handler: authorizer,
-      identitySource: "method.request.header.AuthorizeToken",
+      identitySource: "method.request.header.Authorization",
     });
 
     const restApi = new apigateway.RestApi(this, "Endpoint", {

@@ -20,6 +20,7 @@ env:
   STAGING_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
   STAGING_USER_POOL_CLIENT_ID: ${{ secrets.STAGING_USER_POOL_CLIENT_ID }}
   STAGING_GOOGLE_COGNITO_SECRET_NAME: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+  REACT_APP_API_ENDPOINT: ${{ secrets.REACT_APP_API_ENDPOINT }}
 
 jobs:
   build:
@@ -55,6 +56,7 @@ jobs:
           echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID >> ./app/.env.staging
           echo REACT_APP_COGNITO_AUTH_DOMAIN=simple-travel-diary.auth.${AWS_REGION}.amazoncognito.com >> ./app/.env.staging
           echo REACT_APP_WEB_ENDPOINT=https://${STAGING_SUBDOMAIN}.${STAGING_DOMAIN} >> ./app/.env.staging
+          echo REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT} >> ./app/.env.staging
           echo REACT_APP_DUMMY_TOKEN=${REACT_APP_DUMMY_TOKEN} >> ./app/.env.staging
           yarn --cwd ./app build:staging
 
