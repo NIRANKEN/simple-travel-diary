@@ -113,6 +113,17 @@ export class SimpleTravelDiaryStack extends Construct {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true, // NOT recommended for production code
+      cors: [
+        {
+          allowedMethods: [
+            s3.HttpMethods.GET,
+            s3.HttpMethods.POST,
+            s3.HttpMethods.PUT,
+          ],
+          allowedOrigins: [`https://${appDomain}`],
+          allowedHeaders: ["*"],
+        },
+      ],
     });
 
     // Grant access to cloudfront
@@ -138,6 +149,7 @@ export class SimpleTravelDiaryStack extends Construct {
 
     // CloudFront distribution
     const distribution = new cloudfront.Distribution(this, "AppDistribution", {
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       certificate: certificate,
       defaultRootObject: "index.html",
       domainNames: [appDomain],
