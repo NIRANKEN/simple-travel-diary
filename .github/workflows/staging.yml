@@ -45,10 +45,11 @@ jobs:
         run: |
           npm install -g aws-cdk > /dev/null 2>&1
           yarn install
+          yarn --cwd ./app
+          yarn --cwd ./lambda
 
       - name: Build Web
         run: |
-          yarn --cwd ./app
           echo REACT_APP_GMAP_KEY=$REACT_APP_GMAP_KEY > ./app/.env.staging
           echo REACT_APP_USER_POOL_ID=$STAGING_USER_POOL_ID >> ./app/.env.staging
           echo REACT_APP_USER_POOL_CLIENT_ID=$STAGING_USER_POOL_CLIENT_ID >> ./app/.env.staging
