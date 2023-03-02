@@ -27,11 +27,6 @@ export class SimpleTravelDiaryApiStack extends Construct {
       },
     });
 
-    const helloHandler = new lambda_nodejs.NodejsFunction(
-      this,
-      "HelloHandler",
-      getNodejsFunctionProps("hello.ts")
-    );
     const travelsHandler = new lambda_nodejs.NodejsFunction(
       this,
       "TravelsHandler",
@@ -62,13 +57,6 @@ export class SimpleTravelDiaryApiStack extends Construct {
       },
     });
     const v1 = restApi.root.addResource("v1");
-    v1.resourceForPath("hello").addMethod(
-      "GET",
-      new apigateway.LambdaIntegration(helloHandler),
-      {
-        authorizer: auth,
-      }
-    );
     const user = v1.resourceForPath("{userid}");
     const travels = user.addResource("travels");
     travels.addMethod("GET", new apigateway.LambdaIntegration(travelsHandler), {
