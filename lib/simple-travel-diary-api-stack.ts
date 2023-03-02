@@ -1,4 +1,4 @@
-import { aws_lambda, Duration, Stack, StackProps } from "aws-cdk-lib";
+import { Duration, Stack } from "aws-cdk-lib";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as lambda_nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
@@ -22,7 +22,6 @@ export class SimpleTravelDiaryApiStack extends Construct {
       handler: "handler",
       timeout: Duration.seconds(30),
       environment: {
-        IS_LOCAL: "false",
         PRINCIPAL_ID: props.principalId
       },
     });
@@ -54,6 +53,8 @@ export class SimpleTravelDiaryApiStack extends Construct {
         allowMethods: apigateway.Cors.ALL_METHODS,
         allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
         allowCredentials: true,
+        statusCode: 200,
+        disableCache: true,
       },
     });
     const v1 = restApi.root.addResource("v1");
