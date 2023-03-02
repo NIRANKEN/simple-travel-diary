@@ -71,7 +71,7 @@ jobs:
 
       - name: cdk deploy
         run: >
-          cdk deploy 
+          cdk deploy --require-approval never
           -c domain=${{ env.STAGING_DOMAIN }} 
           -c subdomain=${{ env.STAGING_SUBDOMAIN }}
           -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
