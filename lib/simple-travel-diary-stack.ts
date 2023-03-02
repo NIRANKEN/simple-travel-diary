@@ -166,6 +166,7 @@ export class SimpleTravelDiaryStack extends Construct {
         origin: new cloudfront_origins.S3Origin(appBucket, {
           originAccessIdentity: cloudfrontOAI,
         }),
+        originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
