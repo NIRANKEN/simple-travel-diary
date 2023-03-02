@@ -22,7 +22,7 @@ export class SimpleTravelDiaryApiStack extends Construct {
       handler: "handler",
       timeout: Duration.seconds(30),
       environment: {
-        PRINCIPAL_ID: props.principalId
+        PRINCIPAL_ID: props.principalId,
       },
     });
 
@@ -44,24 +44,23 @@ export class SimpleTravelDiaryApiStack extends Construct {
       identitySource: "method.request.header.Authorization",
     });
 
-    const restApi = new apigateway.RestApi(this, "Endpoint", {
-      defaultCorsPreflightOptions: {
-        allowOrigins: [
-          "https://simple-travel-diary.niranken.tk",
-          "http://localhost:9000",
-        ],
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
-        allowCredentials: true,
-        statusCode: 200,
-        disableCache: true,
-      },
-    });
+    const restApi = new apigateway.RestApi(this, "Endpoint");
     const v1 = restApi.root.addResource("v1");
     const user = v1.resourceForPath("{userid}");
     const travels = user.addResource("travels");
     travels.addMethod("GET", new apigateway.LambdaIntegration(travelsHandler), {
       authorizer: auth,
+    });
+    travels.addCorsPreflight({
+      allowOrigins: [
+        "https://simple-travel-diary.niranken.tk",
+        "http://localhost:9000",
+      ],
+      allowMethods: apigateway.Cors.ALL_METHODS,
+      allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
+      allowCredentials: true,
+      statusCode: 200,
+      disableCache: true,
     });
   }
 }
