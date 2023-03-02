@@ -42,7 +42,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Install CDK Dependency
-        run: yarn
+        run: npm install
 
       - name: Build Web
         run: |
