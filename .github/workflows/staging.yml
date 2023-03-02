@@ -41,8 +41,10 @@ jobs:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install CDK Dependency
-        run: npm install
+      - name: Install CDK & CDK Dependency
+        run: |
+          npm install -g aws-cdk > /dev/null 2>&1
+          yarn install
 
       - name: Build Web
         run: |
@@ -56,28 +58,24 @@ jobs:
           yarn --cwd ./app build:staging
 
       - name: cdk diff
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: "diff"
-          cdk_args: "-c domain=${{ env.STAGING_DOMAIN }}
-            -c subdomain=${{ env.STAGING_SUBDOMAIN }}
-            -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
-            -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
-            -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
-            -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}"
-          actions_comment: true
+        run: >
+          cdk diff 
+          -c domain=${{ env.STAGING_DOMAIN }} 
+          -c subdomain=${{ env.STAGING_SUBDOMAIN }}
+          -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
+          -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
+          -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
+          -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+          -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}
 
       - name: cdk deploy
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: "deploy"
-          cdk_args: "--require-approval never
-            -c domain=${{ env.STAGING_DOMAIN }}
-            -c subdomain=${{ env.STAGING_SUBDOMAIN }}
-            -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
-            -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
-            -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
-            -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
-            -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}"
-          actions_comment: false
+        run: >
+          cdk deploy 
+          -c domain=${{ env.STAGING_DOMAIN }} 
+          -c subdomain=${{ env.STAGING_SUBDOMAIN }}
+          -c accountId=${{ env.STAGING_AWS_ACCOUNT_ID }}
+          -c googleClientId=${{ env.STAGING_GOOGLE_AUTH_CLIENT_ID }}
+          -c googleClientSecret=${{ env.STAGING_GOOGLE_AUTH_CLIENT_SECRET }}
+          -c googleCognitoSecretName=${{ env.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+          -c principalId=${{ env.REACT_APP_DUMMY_TOKEN }}
+
