@@ -113,17 +113,17 @@ export class SimpleTravelDiaryStack extends Construct {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true, // NOT recommended for production code
-      cors: [
-        {
-          allowedMethods: [
-            s3.HttpMethods.GET,
-            s3.HttpMethods.POST,
-            s3.HttpMethods.PUT,
-          ],
-          allowedOrigins: [`https://${appDomain}`],
-          allowedHeaders: ["*"],
-        },
-      ],
+      // cors: [
+      //   {
+      //     allowedMethods: [
+      //       s3.HttpMethods.GET,
+      //       s3.HttpMethods.POST,
+      //       s3.HttpMethods.PUT,
+      //     ],
+      //     allowedOrigins: [`https://${appDomain}`],
+      //     allowedHeaders: ["*"],
+      //   },
+      // ],
     });
 
     // Grant access to cloudfront
@@ -166,7 +166,7 @@ export class SimpleTravelDiaryStack extends Construct {
         origin: new cloudfront_origins.S3Origin(appBucket, {
           originAccessIdentity: cloudfrontOAI,
         }),
-        originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
+        // originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
