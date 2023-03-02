@@ -12,12 +12,19 @@ import { useState } from "react";
 type NoteProps = {
   travelName: string;
   placeName: string;
+  noteText: string;
+  handleWriteNote: (writingNoteText: string) => void;
 };
 
-export const Note: React.FC<NoteProps> = ({ travelName, placeName }) => {
+export const Note: React.FC<NoteProps> = ({
+  travelName,
+  placeName,
+  noteText,
+  handleWriteNote,
+}) => {
   // travelName, placeNameという型を作っておく, チェック関数の外だし
   const [writingNoteText, setWritingNoteText] = useState<string>("");
-  const [noteText, setNoteText] = useState<string>("");
+  // const [noteText, setNoteText] = useState<string>("");
   const [isWriting, setWriting] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const checkNames = (travelName: string, placeName: string): boolean =>
@@ -55,7 +62,7 @@ export const Note: React.FC<NoteProps> = ({ travelName, placeName }) => {
                         writingNoteText &&
                         (e.ctrlKey || e.metaKey)
                       ) {
-                        setNoteText(writingNoteText);
+                        handleWriteNote(writingNoteText);
                         setWriting(false);
                       }
                     }}

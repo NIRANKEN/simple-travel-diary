@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { fetchInterceptor } from "./fetchInterceptor";
 import reportWebVitals from "./reportWebVitals";
+import fetchIntercept from "fetch-intercept";
+
+fetchIntercept.register(fetchInterceptor());
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

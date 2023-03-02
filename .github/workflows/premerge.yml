@@ -5,6 +5,12 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+env:
+  REACT_APP_GMAP_KEY: ${{ secrets.REACT_APP_GMAP_KEY }}
+  STAGING_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
+  STAGING_USER_POOL_CLIENT_ID: ${{ secrets.STAGING_USER_POOL_CLIENT_ID }}
+  STAGING_GOOGLE_COGNITO_SECRET_NAME: ${{ secrets.STAGING_GOOGLE_COGNITO_SECRET_NAME }}
+
 jobs:
   precheck:
     runs-on: ubuntu-latest
@@ -25,7 +31,12 @@ jobs:
           skip-step: install
 
       - name: Run E2ETest
-        run: yarn --cwd ./app test:e2e
+        run: |
+          echo REACT_APP_GMAP_KEY=${REACT_APP_GMAP_KEY} > ./app/.env.local
+          echo REACT_APP_WEB_ENDPOINT=https://localhost:9000 >> ./app/.env.local
+          echo REACT_APP_API_ENDPOINT=http://localhost:3000 >> ./app/.env.local
+          echo REACT_APP_DUMMY_TOKEN=${REACT_APP_DUMMY_TOKEN} >> ./app/.env.local
+          yarn --cwd ./app test:e2e
 
       - name: Upload E2ETest Result
         uses: actions/upload-artifact@v3

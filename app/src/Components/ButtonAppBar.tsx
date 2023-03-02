@@ -22,7 +22,7 @@ export const ButtonAppBar: React.FC<ButtonAppBarProps> = ({
 }) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default">
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title}
@@ -42,13 +42,16 @@ export const ButtonAppBar: React.FC<ButtonAppBarProps> = ({
                 </Button>
               </>
             ) : (
-              <Button
-                onClick={handleSignIn}
-                variant="contained"
-                color="primary"
-              >
-                ログイン
-              </Button>
+              <>
+                {/* Googleのログインボタンに変更する */}
+                <Button
+                  onClick={handleSignIn}
+                  variant="outlined"
+                  color="inherit"
+                >
+                  ログイン
+                </Button>
+              </>
             )}
           </Box>
         </Toolbar>
